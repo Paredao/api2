@@ -1,8 +1,11 @@
 #criar uma api com crud para listar, cadastrar e procurar usuário por ip
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
+
+favicon_path="favicon.ico"
 
 app=FastAPI()
 
@@ -11,7 +14,16 @@ class User(BaseModel):
 
 database:List[User]=[]
 
-@app.post("/users/", response_model=User)
+
+@app.get("/")
+def read_root():
+    return{"message": "Boas vindas!"}
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse(favicon_path)
+
+@app.post("/users/", response_model=User, status_code=201)
 def create_user(user: User):
     for existing_user in database:
         if existing_user.ip == user.ip:
