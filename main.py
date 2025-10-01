@@ -14,7 +14,6 @@ class User(BaseModel):
 
 database:List[User]=[]
 
-
 @app.get("/")
 def read_root():
     return{"message": "Boas vindas!"}
